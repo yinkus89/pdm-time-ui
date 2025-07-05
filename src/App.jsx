@@ -5,7 +5,20 @@ function App() {
   const [project, setProject] = useState('');
   const [date, setDate] = useState('');
   const [logs, setLogs] = useState([]);
+  const [token, setToken] = useState(null);
 
+  // Generate Google OAuth URL and redirect user
+  const handleGoogleLogin = () => {
+    const clientId = '907492769354-4p6hvlm7rkrl3hht5e8cokid0louo4am.apps.googleusercontent.com';
+    const redirectUri = 'http://localhost:3000/callback';  // Your redirect URI here
+    const scope = 'https://www.googleapis.com/auth/calendar.readonly'; // Adjust scope as per your requirement
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&access_type=offline`;
+
+    // Redirect user to Google OAuth URL
+    window.location.href = url;
+  };
+
+  // Fetch logs from the backend server
   const fetchLogs = async () => {
     let query = [];
     if (employee) query.push(`employee=${employee}`);
@@ -21,6 +34,11 @@ function App() {
   return (
     <div className="p-8 font-sans bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold text-blue-600 mb-6">🕓 PDM Time Log Viewer</h1>
+
+      {/* Google Login Button */}
+      <button onClick={handleGoogleLogin} className="bg-blue-600 text-white px-4 py-2 rounded">
+        Login with Google
+      </button>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4 mb-6">
